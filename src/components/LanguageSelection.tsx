@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Search, Users, MapPin, ArrowLeft } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { mockLanguages, mockLessons } from '../lib/mockData';
 import type { Database } from '../lib/database.types';
 
 type Language = Database['public']['Tables']['languages']['Row'];
@@ -20,6 +21,16 @@ export function LanguageSelection({ onNavigate }: LanguageSelectionProps) {
 
   async function fetchLanguages() {
     try {
+      if (!supabase) {
+        const languagesWithCounts = mockLanguages.map(lang => ({
+          ...lang,
+          lessons_count: mockLessons.filter(l => l.language_id === lang.id).length,
+        }));
+        setLanguages(languagesWithCounts);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from('languages')
         .select('*')

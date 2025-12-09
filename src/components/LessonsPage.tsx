@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ArrowLeft, BookOpen, Award, CheckCircle, Lock } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useUser } from '../context/UserContext';
+import { mockLanguages, mockLessons } from '../lib/mockData';
 import type { Database } from '../lib/database.types';
 
 type Language = Database['public']['Tables']['languages']['Row'];
@@ -26,6 +27,25 @@ export function LessonsPage({ languageId, onNavigate }: LessonsPageProps) {
 
   async function fetchData() {
     try {
+      if (!supabase) {
+        const lang = mockLanguages.find(l => l.id === languageId);
+        const lessonsList = mockLessons.filter(l => l.language_id === languageId);
+
+        const storedProgress = localStorage.getItem(`progress_${userId}`);
+        const progress = storedProgress ? JSON.parse(storedProgress) : {};
+        const completedIds = Object.keys(progress).filter(id => progress[id]);
+
+        const storedXp = localStorage.getItem(`xp_${userId}_${languageId}`);
+        const xp = storedXp ? parseInt(storedXp, 10) : 0;
+
+        setLanguage(lang || null);
+        setLessons(lessonsList);
+        setCompletedLessons(new Set(completedIds));
+        setTotalXp(xp);
+        setLoading(false);
+        return;
+      }
+
       const [langResult, lessonsResult, progressResult, xpResult] = await Promise.all([
         supabase.from('languages').select('*').eq('id', languageId).maybeSingle(),
         supabase

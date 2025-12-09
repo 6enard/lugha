@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ArrowLeft, CheckCircle, XCircle, Award } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useUser } from '../context/UserContext';
+import { mockLessons, mockQuizQuestions } from '../lib/mockData';
 import type { Database } from '../lib/database.types';
 
 type Lesson = Database['public']['Tables']['lessons']['Row'];
@@ -29,6 +30,16 @@ export function QuizView({ lessonId, onNavigate }: QuizViewProps) {
 
   async function fetchQuiz() {
     try {
+      if (!supabase) {
+        const lessonData = mockLessons.find(l => l.id === lessonId);
+        const questionsData = mockQuizQuestions.filter(q => q.lesson_id === lessonId);
+
+        setLesson(lessonData || null);
+        setQuestions(questionsData);
+        setLoading(false);
+        return;
+      }
+
       const [lessonResult, questionsResult] = await Promise.all([
         supabase.from('lessons').select('*').eq('id', lessonId).maybeSingle(),
         supabase.from('quiz_questions').select('*').eq('lesson_id', lessonId),
@@ -75,6 +86,21 @@ export function QuizView({ lessonId, onNavigate }: QuizViewProps) {
     const finalScore = Math.round((score / questions.length) * 100);
 
     try {
+      if (!supabase) {
+        const storedProgress = localStorage.getItem(`progress_${userId}`) || '{}';
+        const progress = JSON.parse(storedProgress);
+        progress[lessonId] = finalScore >= 70;
+        localStorage.setItem(`progress_${userId}`, JSON.stringify(progress));
+
+        const storedXp = localStorage.getItem(`xp_${userId}_${lesson!.language_id}`) || '0';
+        const currentXp = parseInt(storedXp, 10);
+        const newXp = currentXp + lesson!.xp_reward;
+        localStorage.setItem(`xp_${userId}_${lesson!.language_id}`, newXp.toString());
+
+        setQuizCompleted(true);
+        return;
+      }
+
       await Promise.all([
         supabase.from('user_progress').upsert({
           user_id: userId,

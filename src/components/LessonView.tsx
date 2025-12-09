@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { mockLessons, mockVocabulary } from '../lib/mockData';
 import type { Database } from '../lib/database.types';
 
 type Lesson = Database['public']['Tables']['lessons']['Row'];
@@ -24,6 +25,16 @@ export function LessonView({ lessonId, onNavigate }: LessonViewProps) {
 
   async function fetchLesson() {
     try {
+      if (!supabase) {
+        const lessonData = mockLessons.find(l => l.id === lessonId);
+        const vocabData = mockVocabulary.filter(v => v.lesson_id === lessonId);
+
+        setLesson(lessonData || null);
+        setVocabulary(vocabData);
+        setLoading(false);
+        return;
+      }
+
       const [lessonResult, vocabResult] = await Promise.all([
         supabase.from('lessons').select('*').eq('id', lessonId).maybeSingle(),
         supabase.from('vocabulary').select('*').eq('lesson_id', lessonId),
