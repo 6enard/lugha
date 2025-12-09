@@ -133,19 +133,22 @@ export function LessonView({ lessonId, onNavigate }: LessonViewProps) {
           </div>
         </div>
 
-        <div className="perspective-1000 mb-8">
+        <div className="perspective-1000 mb-8 h-96">
           <div
             onClick={handleFlip}
-            className={`relative w-full bg-white rounded-2xl shadow-xl border-2 border-gray-200 cursor-pointer transition-all duration-500 transform-style-3d ${
-              isFlipped ? 'rotate-y-180' : ''
-            }`}
-            style={{ minHeight: '400px' }}
+            className="relative w-full h-full transition-transform duration-500 transform-style-3d cursor-pointer"
+            style={{
+              transformStyle: 'preserve-3d',
+              transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+            }}
           >
             <div
-              className={`absolute inset-0 p-12 flex flex-col items-center justify-center backface-hidden ${
-                isFlipped ? 'hidden' : ''
-              }`}
+              className="absolute inset-0 w-full h-full bg-white rounded-2xl shadow-xl border-2 border-gray-200 p-12 flex flex-col items-center justify-center"
+              style={{
+                backfaceVisibility: 'hidden',
+              }}
             >
+              <img src="/lughalogo.png" alt="Lugha" className="w-16 h-16 mb-4 opacity-75" />
               <p className="text-sm text-gray-500 mb-4">Word / Phrase</p>
               <h2 className="text-5xl font-bold text-gray-900 mb-6 text-center">
                 {currentVocab.word_or_phrase}
@@ -158,10 +161,13 @@ export function LessonView({ lessonId, onNavigate }: LessonViewProps) {
             </div>
 
             <div
-              className={`absolute inset-0 p-12 flex flex-col items-center justify-center backface-hidden ${
-                !isFlipped ? 'hidden' : ''
-              }`}
+              className="absolute inset-0 w-full h-full bg-white rounded-2xl shadow-xl border-2 border-gray-200 p-12 flex flex-col items-center justify-center"
+              style={{
+                backfaceVisibility: 'hidden',
+                transform: 'rotateY(180deg)',
+              }}
             >
+              <img src="/lughalogo.png" alt="Lugha" className="w-16 h-16 mb-4 opacity-75" />
               <p className="text-sm text-gray-500 mb-4">Translation</p>
               <h2 className="text-4xl font-bold text-emerald-600 mb-6 text-center">
                 {currentVocab.translation}
