@@ -1,4 +1,4 @@
-import { BookOpen, Globe, Trophy, Sparkles } from 'lucide-react';
+import { BookOpen, Trophy, Sparkles } from 'lucide-react';
 
 interface HomePageProps {
   onNavigate: (page: string) => void;
@@ -9,8 +9,8 @@ export function HomePage({ onNavigate }: HomePageProps) {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
       <div className="max-w-6xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 mb-6 shadow-lg">
-            <Globe className="w-10 h-10 text-white" />
+          <div className="inline-flex items-center justify-center w-32 h-32 mb-6">
+            <img src="/lughalogo.png" alt="Lugha Logo" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-4">
             Lugha
