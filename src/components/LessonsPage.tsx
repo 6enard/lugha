@@ -203,14 +203,14 @@ export function LessonsPage({ languageId, onNavigate }: LessonsPageProps) {
         <div className="space-y-4">
           {lessons.map((lesson, index) => {
             const isCompleted = completedLessons.has(lesson.id);
-            const isLocked = index > 0 && !completedLessons.has(lessons[index - 1].id);
+            const isLocked = false;
             const isActive = !isCompleted && !isLocked;
 
             return (
               <button
                 key={lesson.id}
-                onClick={() => !isLocked && onNavigate('lesson', lesson.id)}
-                disabled={isLocked}
+                onClick={() => onNavigate('lesson', lesson.id)}
+                disabled={false}
                 style={{
                   animation: `slideInUp 0.5s ease-out ${index * 0.05}s forwards`,
                   opacity: 0,
