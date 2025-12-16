@@ -101,28 +101,32 @@ export function LanguageSelection({ onNavigate }: LanguageSelectionProps) {
         </button>
 
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full mb-4 font-semibold text-sm shadow-sm">
-            <Sparkles className="w-4 h-4" />
+          <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-full mb-6 font-bold text-sm shadow-lg hover:scale-105 transition-transform duration-300">
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center animate-pulse">
+              <Sparkles className="w-4 h-4" />
+            </div>
             <span>{languages.length} Languages Available</span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
+          <h1 className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-6 tracking-tight">
             Choose Your Language
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+          <p className="text-2xl text-gray-700 max-w-2xl mx-auto mb-10 font-semibold">
             Embark on a cultural journey through Kenya's rich linguistic tapestry
           </p>
 
-          <div className="max-w-xl mx-auto relative">
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-              <Search className="w-5 h-5 text-gray-400" />
+          <div className="max-w-2xl mx-auto relative group">
+            <div className="absolute left-5 top-1/2 transform -translate-y-1/2 z-10">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                <Search className="w-5 h-5 text-white" />
+              </div>
             </div>
             <input
               type="text"
               placeholder="Search by language, tribe, or county..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none text-gray-900 placeholder-gray-400 shadow-lg focus:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm"
+              className="w-full pl-20 pr-6 py-5 rounded-2xl border-3 border-gray-200 focus:border-emerald-500 focus:outline-none text-gray-900 placeholder-gray-500 shadow-xl focus:shadow-2xl transition-all duration-300 bg-white/90 backdrop-blur-md text-lg font-medium"
             />
           </div>
         </div>

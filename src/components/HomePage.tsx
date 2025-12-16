@@ -45,7 +45,13 @@ export function HomePage({ onNavigate }: HomePageProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 overflow-hidden relative">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 -left-10 w-96 h-96 bg-emerald-400/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
+        <div className="absolute top-40 right-20 w-96 h-96 bg-teal-400/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-20 left-1/3 w-96 h-96 bg-cyan-400/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
+      </div>
+
       <style>{`
         @keyframes slideInUp {
           from {
@@ -67,6 +73,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
           }
         }
 
+        @keyframes blob {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
         @keyframes shimmer {
           0% {
             background-position: -1000px 0;
@@ -76,14 +88,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
           }
         }
 
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
           }
-          to {
-            opacity: 1;
-            transform: scale(1);
+          50% {
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.5);
           }
         }
 
@@ -95,26 +105,45 @@ export function HomePage({ onNavigate }: HomePageProps) {
           animation: float 3s ease-in-out infinite;
         }
 
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+
         .card-hover {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .icon-float {
           animation: float 3.5s ease-in-out infinite;
         }
+
+        .glass-effect {
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+        }
       `}</style>
 
-      <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-20">
           <div
-            className="inline-flex items-center justify-center w-32 h-32 mb-8 animate-float"
+            className="inline-flex items-center justify-center w-36 h-36 mb-8 animate-float relative"
             style={{ opacity: isLoaded ? 1 : 0, animation: isLoaded ? 'float 3s ease-in-out infinite' : 'none' }}
           >
-            <img src="/lughalogo.png" alt="Lugha Logo" className="w-full h-full object-contain drop-shadow-lg" />
+            <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-2xl"></div>
+            <img src="/lughalogo.png" alt="Lugha Logo" className="w-full h-full object-contain drop-shadow-2xl relative z-10" />
           </div>
 
           <h1
-            className="text-6xl sm:text-7xl font-bold text-gray-900 mb-4 tracking-tight"
+            className="text-7xl sm:text-8xl font-bold bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-4 tracking-tight"
             style={{
               opacity: isLoaded ? 1 : 0,
               animation: isLoaded ? 'slideInUp 0.7s ease-out forwards' : 'none',
@@ -124,7 +153,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </h1>
 
           <p
-            className="text-2xl sm:text-3xl font-semibold text-emerald-700 mb-4"
+            className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-700 to-teal-700 bg-clip-text text-transparent mb-6"
             style={{
               opacity: isLoaded ? 1 : 0,
               animation: isLoaded ? 'slideInUp 0.7s ease-out 0.1s forwards' : 'none',
@@ -134,7 +163,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </p>
 
           <p
-            className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed"
+            className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed font-medium"
             style={{
               opacity: isLoaded ? 1 : 0,
               animation: isLoaded ? 'slideInUp 0.7s ease-out 0.2s forwards' : 'none',
@@ -165,26 +194,30 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 onMouseLeave={() => setHoveredCard(null)}
               >
                 <div
-                  className={`bg-white rounded-2xl p-8 shadow-lg border border-gray-100 card-hover h-full
-                    ${hoveredCard === index ? 'shadow-2xl -translate-y-2' : 'shadow-lg hover:shadow-xl'}
+                  className={`glass-effect rounded-3xl p-8 shadow-xl border-2 border-white/50 card-hover h-full relative overflow-hidden
+                    ${hoveredCard === index ? 'shadow-2xl -translate-y-3 scale-105' : 'shadow-xl'}
                   `}
                 >
-                  <div
-                    className={`w-16 h-16 rounded-full bg-${feature.color}-100 flex items-center justify-center mb-6 transition-all duration-300 ${
-                      hoveredCard === index ? `scale-110 bg-${feature.color}-200` : ''
-                    }`}
-                  >
-                    <Icon className={`w-8 h-8 text-${feature.color}-600`} />
-                  </div>
+                  <div className={`absolute inset-0 bg-gradient-to-br from-${feature.color}-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
 
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors">
-                    {feature.title}
-                  </h3>
+                  <div className="relative z-10">
+                    <div
+                      className={`w-20 h-20 rounded-2xl bg-gradient-to-br from-${feature.color}-400 to-${feature.color}-600 flex items-center justify-center mb-6 transition-all duration-500 shadow-lg ${
+                        hoveredCard === index ? 'scale-110 rotate-6 shadow-2xl' : ''
+                      }`}
+                    >
+                      <Icon className="w-10 h-10 text-white" />
+                    </div>
 
-                  <p className="text-gray-600 leading-relaxed mb-4">{feature.description}</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors">
+                      {feature.title}
+                    </h3>
 
-                  <div className={`flex items-center text-${feature.color}-600 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity`}>
-                    Learn more <ArrowRight className="w-4 h-4 ml-2" />
+                    <p className="text-gray-700 leading-relaxed mb-6 font-medium">{feature.description}</p>
+
+                    <div className={`flex items-center text-${feature.color}-600 font-bold text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-2`}>
+                      Learn more <ArrowRight className="w-4 h-4 ml-2" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -201,41 +234,49 @@ export function HomePage({ onNavigate }: HomePageProps) {
         >
           <button
             onClick={() => onNavigate('languages')}
-            className="group inline-flex items-center px-12 py-5 text-lg font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full hover:from-emerald-700 hover:to-teal-700 transform hover:scale-110 transition-all duration-300 shadow-xl hover:shadow-2xl"
+            className="group relative inline-flex items-center px-14 py-6 text-xl font-bold text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 rounded-full hover:from-emerald-700 hover:via-teal-700 hover:to-cyan-700 transform hover:scale-110 transition-all duration-500 shadow-2xl hover:shadow-emerald-500/50 overflow-hidden"
           >
-            Start Learning
-            <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            <span className="relative z-10">Start Learning</span>
+            <ArrowRight className="relative z-10 ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
           </button>
         </div>
 
         <div
-          className="bg-white rounded-3xl p-12 shadow-xl border border-gray-100 backdrop-blur-sm"
+          className="glass-effect rounded-3xl p-12 shadow-2xl border-2 border-white/50 relative overflow-hidden"
           style={{
             opacity: isLoaded ? 1 : 0,
             animation: isLoaded ? 'slideInUp 0.7s ease-out 0.4s forwards' : 'none',
           }}
         >
-          <div className="mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <Users className="w-8 h-8 text-emerald-600 mr-3" />
-              <h2 className="text-3xl font-bold text-gray-900">Why Learn Kenyan Languages?</h2>
-            </div>
-          </div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-200/30 to-transparent rounded-full -mr-32 -mt-32"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-teal-200/30 to-transparent rounded-full -ml-32 -mb-32"></div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {reasons.map((reason, index) => (
-              <div
-                key={index}
-                className="flex gap-4 p-4 rounded-xl hover:bg-emerald-50 transition-all duration-300 cursor-pointer group"
-              >
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-8 w-8 rounded-full bg-emerald-600 text-white font-bold text-sm group-hover:scale-110 transition-transform">
-                    {index + 1}
-                  </div>
+          <div className="relative z-10">
+            <div className="mb-10">
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mr-4 shadow-lg">
+                  <Users className="w-8 h-8 text-white" />
                 </div>
-                <p className="text-gray-700 leading-relaxed text-lg group-hover:text-gray-900 transition-colors font-medium">{reason}</p>
+                <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">Why Learn Kenyan Languages?</h2>
               </div>
-            ))}
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {reasons.map((reason, index) => (
+                <div
+                  key={index}
+                  className="flex gap-4 p-5 rounded-2xl hover:bg-gradient-to-br hover:from-emerald-50/80 hover:to-teal-50/80 transition-all duration-300 cursor-pointer group border-2 border-transparent hover:border-emerald-200/50 backdrop-blur-sm"
+                >
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-bold text-base group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-md">
+                      {index + 1}
+                    </div>
+                  </div>
+                  <p className="text-gray-800 leading-relaxed text-lg group-hover:text-gray-900 transition-colors font-semibold">{reason}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -246,9 +287,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
             animation: isLoaded ? 'slideInUp 0.7s ease-out 0.5s forwards' : 'none',
           }}
         >
-          <div className="inline-flex items-center gap-3 bg-emerald-50 rounded-full px-8 py-3 border border-emerald-200">
-            <Zap className="w-5 h-5 text-emerald-600" />
-            <p className="text-emerald-700 font-semibold">Join thousands learning their heritage languages</p>
+          <div className="inline-flex items-center gap-3 glass-effect rounded-full px-10 py-4 border-2 border-white/50 shadow-xl hover:scale-105 transition-transform duration-300">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md animate-pulse">
+              <Zap className="w-5 h-5 text-white" />
+            </div>
+            <p className="bg-gradient-to-r from-emerald-700 to-teal-700 bg-clip-text text-transparent font-bold text-lg">Join thousands learning their heritage languages</p>
           </div>
         </div>
       </div>
